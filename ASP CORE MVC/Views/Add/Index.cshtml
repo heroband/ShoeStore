@@ -1,22 +1,22 @@
-﻿@model Sneakers 
+﻿@model SneakersDto
 @{
-    ViewData["Title"] = "Add Sneakers";
+    ViewData["Title"] = "Add Sneakers to Database";
 }
 
-<h1>No goods here</h1>
+@section styles {
+    <link rel="stylesheet" href="~/css/site.css" />
+}
+
+<h1>Add New Sneakers</h1>
 
 <form method="post" asp-controller="Add" asp-action="Check">
     <label asp-for="Name"></label>
-    <input asp-for="Name"/>
+    <input asp-for="Name" />
     <span asp-validation-for="Name"></span>
 
     <label asp-for="Description"></label>
     <input asp-for="Description" />
     <span asp-validation-for="Description"></span>
-
-    <label asp-for="Id"></label>
-    <input asp-for="Id" />
-    <span asp-validation-for="Id"></span>
 
     <label asp-for="Size"></label>
     <input asp-for="Size" />

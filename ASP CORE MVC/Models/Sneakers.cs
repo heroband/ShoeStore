@@ -1,25 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_CORE_MVC.Models
 {
+    [Table("Sneakers")]
     public class Sneakers
     {
-        [Display(Name = "Input sneakers name")]
-        [Required(ErrorMessage = "You need to input name")]
-        public string? Name { get; set; }
-        [Display(Name = "Input sneakers description")]
-        [Required(ErrorMessage = "You need to input description")]
-        public string? Description { get; set; }
-        [Display(Name = "Input sneakers id")]
-        [Required(ErrorMessage = "You need to input id")]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        [Display(Name = "Input sneakers size")]
-        [Required(ErrorMessage = "You need to input size")]
-        [Range(1, 99, ErrorMessage = "Size must be between 1 and 99.")]
+        public string? Name { get; set; }
+        public string? Description { get; set; }
         public int Size { get; set; }
-        [Display(Name = "Input sneakers price")]
-        [Required(ErrorMessage = "You need to input price")]
         public decimal Price { get; set; }
 
     }

@@ -1,7 +1,16 @@
+using ASP_CORE_MVC.Data;
+using ASP_CORE_MVC.Interfaces;
+using ASP_CORE_MVC.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ISneakersRepository, SneakersRepository>();
 
 var app = builder.Build();
 
