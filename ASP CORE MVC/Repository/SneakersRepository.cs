@@ -1,6 +1,7 @@
 ﻿using ASP_CORE_MVC.Data;
 using ASP_CORE_MVC.Interfaces;
 using ASP_CORE_MVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_CORE_MVC.Repository
 {
@@ -16,6 +17,11 @@ namespace ASP_CORE_MVC.Repository
             await _context.Sneakers.AddAsync(sneakersModel);
             await _context.SaveChangesAsync();
             return sneakersModel;
+        }
+
+        public async Task<IEnumerable<Sneakers>> GetAllAsync()
+        {
+            return await _context.Sneakers.ToListAsync();
         }
     }
 }
