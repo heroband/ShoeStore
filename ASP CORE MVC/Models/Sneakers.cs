@@ -15,7 +15,6 @@ namespace ASP_CORE_MVC.Models
         public string? Description { get; set; }
         public int Size { get; set; }
         public decimal Price { get; set; }
-        /*public string ImageUrl { get; set; } // URL изображения*/
-
+        public string ImageUrl { get; set; }
     }
 }

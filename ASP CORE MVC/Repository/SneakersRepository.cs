@@ -1,6 +1,7 @@
 ﻿using ASP_CORE_MVC.Data;
 using ASP_CORE_MVC.Interfaces;
 using ASP_CORE_MVC.Models;
+using ASP_CORE_MVC.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASP_CORE_MVC.Repository
@@ -19,9 +20,52 @@ namespace ASP_CORE_MVC.Repository
             return sneakersModel;
         }
 
-        public async Task<IEnumerable<Sneakers>> GetAllAsync()
+        public async Task<Sneakers?> DeleteAsync(string id)
         {
-            return await _context.Sneakers.ToListAsync();
+            var sneakers = await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
+            if (sneakers == null)
+            {
+                return null;
+            }
+
+            _context.Sneakers.Remove(sneakers);
+            await _context.SaveChangesAsync();
+
+            return sneakers;
+        }
+
+        public async Task<IEnumerable<SneakersShortInfoDto>> GetAllShortInfoAsync()
+        {
+            return await _context.Sneakers.Select(s => new SneakersShortInfoDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Price = s.Price,
+                ImageUrl = s.ImageUrl,
+            }).ToListAsync();
+        }
+
+        public async Task<Sneakers?> GetByIdAsync(string id)
+        {
+            return await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task<Sneakers?> UpdateAsync(string id, SneakersDto sneakersDto)
+        {
+            var sneakers = await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
+
+            if (sneakers == null)
+            {
+                return null;
+            }
+
+            sneakers.Name = sneakersDto.Name;
+            sneakers.Description = sneakersDto.Description;
+            sneakers.Size = sneakersDto.Size;
+            sneakers.Price = sneakersDto.Price;
+
+            await _context.SaveChangesAsync();
+            return sneakers;
         }
     }
 }

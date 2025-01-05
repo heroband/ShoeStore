@@ -1,5 +1,6 @@
 ﻿using ASP_CORE_MVC.Data;
 using ASP_CORE_MVC.Interfaces;
+using ASP_CORE_MVC.Mappers;
 using ASP_CORE_MVC.Models;
 using ASP_CORE_MVC.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -21,21 +22,14 @@ namespace ASP_CORE_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Check(SneakersDto sneakersDto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var sneakers = new Sneakers
-                {
-                    Name = sneakersDto.Name,
-                    Description = sneakersDto.Description,
-                    Size = sneakersDto.Size,
-                    Price = sneakersDto.Price,
-                };
-                await _sneakersRepository.CreateAsync(sneakers);
-                return Redirect("/");
+                return View("Index");
             }
 
-            Console.WriteLine(ModelState.IsValid);
-            return View("Index");
+            var sneakers = sneakersDto.ToSneakersFromDto();
+            await _sneakersRepository.CreateAsync(sneakers);
+            return Redirect("/AllProducts");
         }
     }
 }

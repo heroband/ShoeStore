@@ -1,12 +1,12 @@
 ﻿@model SneakersDto
 @{
-    ViewData["Title"] = "Add New Sneakers";
+    ViewData["Title"] = "Edit - " + Model.Name;
 }
 
 <div class="container mt-5">
-    <h1 class="mb-4 text-center text-success"><i class="bi bi-plus-circle"></i> Add a New Sneakers</h1>
+    <h1 class="mb-4 text-center text-warning"><i class="bi bi-pencil-square"></i> Edit Sneakers</h1>
 
-    <form method="post" asp-controller="Add" asp-action="Check" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         <!-- Name -->
         <div class="form-group mb-4">
             <label asp-for="Name" class="form-label">Sneakers Name</label>
@@ -17,7 +17,7 @@
         <!-- Description -->
         <div class="form-group mb-4">
             <label asp-for="Description" class="form-label">Sneakers Description</label>
-            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter a detailed description"></textarea>
+            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
@@ -42,10 +42,10 @@
             <span asp-validation-for="ImageUrl" class="text-danger"></span>
         </div>
 
-        <!-- Submit -->
+        <!-- Save & Cancel buttons -->
         <div class="d-flex justify-content-between mt-4">
             <button type="submit" class="btn btn-success px-4">
-                <i class="bi bi-check-circle me-2"></i> Add Sneakers
+                <i class="bi bi-save me-2"></i> Save Changes
             </button>
             <a href="/AllProducts" class="btn btn-secondary px-4">
                 <i class="bi bi-arrow-left-circle me-2"></i> Back to Products

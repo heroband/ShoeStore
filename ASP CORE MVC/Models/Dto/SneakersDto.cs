@@ -17,5 +17,8 @@ namespace ASP_CORE_MVC.Models.Dto
         [Required(ErrorMessage = "You need to input price")]
         [Display(Name = "Input sneakers price")]
         public decimal Price { get; set; }
+        [Url(ErrorMessage = "Invalid URL format.")]
+        [Display(Name = "Input sneakers image URL")]
+        public string ImageUrl { get; set; }
     }
 }
