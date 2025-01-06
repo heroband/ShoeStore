@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
-using Microsoft.EntityFrameworkCore;
 
-namespace ASP_CORE_MVC.Models
+namespace ShoeStore.Models.Entities
 {
     [Table("Sneakers")]
     public class Sneakers

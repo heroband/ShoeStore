@@ -1,6 +1,6 @@
-﻿namespace ASP_CORE_MVC.Models.Dto
+﻿namespace ShoeStore.Models.ViewModels
 {
-    public class SneakersShortInfoDto
+    public class SneakersShortInfoViewModel
     {
         public string Id { get; set; }
         public string? Name { get; set; }

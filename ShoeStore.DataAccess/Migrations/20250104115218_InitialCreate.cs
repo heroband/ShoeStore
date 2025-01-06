@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ASP_CORE_MVC.Migrations
+namespace ShoeStore.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

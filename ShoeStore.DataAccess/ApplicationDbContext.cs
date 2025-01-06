@@ -1,13 +1,13 @@
-﻿using ASP_CORE_MVC.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoeStore.Models.Entities;
 
-namespace ASP_CORE_MVC.Data
+namespace ShoeStore.DataAccess
 {
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
 
         public DbSet<Sneakers> Sneakers { get; set; }

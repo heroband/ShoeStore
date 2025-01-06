@@ -1,10 +1,9 @@
-﻿using ASP_CORE_MVC.Data;
-using ASP_CORE_MVC.Interfaces;
-using ASP_CORE_MVC.Models;
-using ASP_CORE_MVC.Models.Dto;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoeStore.Models.Entities;
+using ShoeStore.Models.Interfaces;
+using ShoeStore.Models.ViewModels;
 
-namespace ASP_CORE_MVC.Repository
+namespace ShoeStore.DataAccess.Repository
 {
     public class SneakersRepository : ISneakersRepository
     {
@@ -34,9 +33,9 @@ namespace ASP_CORE_MVC.Repository
             return sneakers;
         }
 
-        public async Task<IEnumerable<SneakersShortInfoDto>> GetAllShortInfoAsync()
+        public async Task<IEnumerable<SneakersShortInfoViewModel>> GetAllShortInfoAsync()
         {
-            return await _context.Sneakers.Select(s => new SneakersShortInfoDto
+            return await _context.Sneakers.Select(s => new SneakersShortInfoViewModel
             {
                 Id = s.Id,
                 Name = s.Name,
@@ -50,7 +49,7 @@ namespace ASP_CORE_MVC.Repository
             return await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<Sneakers?> UpdateAsync(string id, SneakersDto sneakersDto)
+        public async Task<Sneakers?> UpdateAsync(string id, SneakersViewModel sneakersDto)
         {
             var sneakers = await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
 

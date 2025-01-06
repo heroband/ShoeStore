@@ -1,12 +1,12 @@
 ﻿using System.Runtime.CompilerServices;
-using ASP_CORE_MVC.Models;
-using ASP_CORE_MVC.Models.Dto;
+using ShoeStore.Models.Entities;
+using ShoeStore.Models.ViewModels;
 
-namespace ASP_CORE_MVC.Mappers
+namespace ShoeStore.Models.Mappers
 {
     public static class SneakersMappers
     {
-        public static Sneakers ToSneakersFromDto(this SneakersDto sneakersDto)
+        public static Sneakers ToSneakersFromDto(this SneakersViewModel sneakersDto)
         {
             return new Sneakers
             {
@@ -18,9 +18,9 @@ namespace ASP_CORE_MVC.Mappers
             };
         }
 
-        public static SneakersDto ToSneakersDto(this Sneakers sneakers)
+        public static SneakersViewModel ToSneakersDto(this Sneakers sneakers)
         {
-            return new SneakersDto
+            return new SneakersViewModel
             {
                 Name = sneakers.Name,
                 Description = sneakers.Description,

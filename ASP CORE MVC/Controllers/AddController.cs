@@ -1,11 +1,9 @@
-﻿using ASP_CORE_MVC.Data;
-using ASP_CORE_MVC.Interfaces;
-using ASP_CORE_MVC.Mappers;
-using ASP_CORE_MVC.Models;
-using ASP_CORE_MVC.Models.Dto;
+﻿using ShoeStore.Models.Interfaces;
+using ShoeStore.Models.Mappers;
+using ShoeStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASP_CORE_MVC.Controllers
+namespace ShoeStore.Controllers
 {
     public class AddController : Controller
     {
@@ -20,7 +18,7 @@ namespace ASP_CORE_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Check(SneakersDto sneakersDto)
+        public async Task<IActionResult> Check(SneakersViewModel sneakersDto)
         {
             if (!ModelState.IsValid)
             {

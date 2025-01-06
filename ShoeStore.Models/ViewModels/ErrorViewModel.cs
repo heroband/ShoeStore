@@ -1,4 +1,4 @@
-namespace ASP_CORE_MVC.Models
+namespace ShoeStore.Models.ViewModels
 {
     public class ErrorViewModel
     {

@@ -1,11 +1,10 @@
 ﻿using System.Diagnostics;
-using ASP_CORE_MVC.Interfaces;
-using ASP_CORE_MVC.Mappers;
-using ASP_CORE_MVC.Models;
-using ASP_CORE_MVC.Models.Dto;
+using ShoeStore.Models.Interfaces;
+using ShoeStore.Models.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using ShoeStore.Models.ViewModels;
 
-namespace ASP_CORE_MVC.Controllers
+namespace ShoeStore.Controllers
 {
     public class AllProductsController : Controller
     {
@@ -51,7 +50,7 @@ namespace ASP_CORE_MVC.Controllers
         }
 
         [HttpPost("AllProducts/Edit/{id}")]
-        public async Task<IActionResult> Edit(string id, SneakersDto sneakersDto)
+        public async Task<IActionResult> Edit(string id, SneakersViewModel sneakersDto)
         {
             if (!ModelState.IsValid)
             {

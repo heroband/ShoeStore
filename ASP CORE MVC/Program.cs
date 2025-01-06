@@ -1,6 +1,6 @@
-using ASP_CORE_MVC.Data;
-using ASP_CORE_MVC.Interfaces;
-using ASP_CORE_MVC.Repository;
+using ShoeStore.DataAccess;
+using ShoeStore.Models.Interfaces;
+using ShoeStore.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

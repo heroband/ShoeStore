@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ASP_CORE_MVC.Models.Dto
+namespace ShoeStore.Models.ViewModels
 {
-    public class SneakersDto
+    public class SneakersViewModel
     {
         [Required(ErrorMessage = "You need to input name")]
         [Display(Name = "Input sneakers name")]
