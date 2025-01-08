@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShoeStore.DataAccess.Repository;
 using ShoeStore.Models.Entities;
@@ -42,13 +43,15 @@ namespace ShoeStore.Controllers
                 return View(loginViewModel);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, false, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginViewModel.Password, false);
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("Password", "Invalid password.");
+                ModelState.AddModelError("Password", "Invalid password." + loginViewModel.Password);
                 return View(loginViewModel);
             }
+
+            await _signInManager.SignInAsync(user, false);
 
             return RedirectToAction("Index", "Home");
         }
@@ -78,15 +81,26 @@ namespace ShoeStore.Controllers
             {
                 UserName = userViewModel.Name,
                 Email = userViewModel.Email,
-                Role = "User" 
             };
 
-            await _userRepository.AddUserAsync(user, userViewModel.Password);
+            var createdUser = await _userManager.CreateAsync(user, userViewModel.Password);
+
+            if (!createdUser.Succeeded)
+            {
+                foreach (var error in createdUser.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(userViewModel); // Возвращаем ошибку, если создание не удалось
+            }
+
+            await _userManager.AddToRoleAsync(user, "User");
             await _signInManager.SignInAsync(user, isPersistent: false);
-            
+
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "User,Admin")]
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {

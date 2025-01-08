@@ -19,14 +19,18 @@
                                     <a href="/AllProducts/Details/@sneakers.Id" class="btn btn-sm btn-outline-secondary d-flex align-items-center">
                                         <i class="bi bi-eye me-2"></i>View
                                     </a>
-                                    <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center">
-                                        <i class="bi bi-pencil-square me-2"></i>Edit
-                                    </a>
-                                    <form method="post" action="/AllProducts/Delete/@sneakers.Id" style="display:inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center">
-                                            <i class="bi bi-trash me-2"></i>Delete
-                                        </button>
-                                    </form>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center">
+                                            <i class="bi bi-pencil-square me-2"></i>Edit
+                                        </a>
+                                        <form method="post" action="/AllProducts/Delete/@sneakers.Id" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center">
+                                                <i class="bi bi-trash me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    }
                                 </div>
                                 <small class="text-muted">@sneakers.Price UAH</small>
                             </div>
@@ -35,17 +39,20 @@
                 </div>
             }
 
-            <div class="col">
-                <div class="card shadow-sm text-center" style="height: 100%;">
-                    <a href="/Add" class="d-flex justify-content-center align-items-center"
-                       style="height: 225px; text-decoration: none; color: inherit;">
-                        <i class="bi bi-plus-circle" style="font-size: 4rem;"></i>
-                    </a>
-                    <div class="card-body">
-                        <p class="card-text">Add a new product</p>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col">
+                    <div class="card shadow-sm text-center" style="height: 100%;">
+                        <a href="/Add" class="d-flex justify-content-center align-items-center"
+                           style="height: 225px; text-decoration: none; color: inherit;">
+                            <i class="bi bi-plus-circle" style="font-size: 4rem;"></i>
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text">Add a new product</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </div>

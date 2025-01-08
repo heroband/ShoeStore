@@ -2,9 +2,11 @@
 using ShoeStore.Models.Mappers;
 using ShoeStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShoeStore.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AddController : Controller
     {
         private readonly ISneakersRepository _sneakersRepository;

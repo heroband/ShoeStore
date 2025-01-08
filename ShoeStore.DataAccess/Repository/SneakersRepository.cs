@@ -62,6 +62,7 @@ namespace ShoeStore.DataAccess.Repository
             sneakers.Description = sneakersDto.Description;
             sneakers.Size = sneakersDto.Size;
             sneakers.Price = sneakersDto.Price;
+            sneakers.ImageUrl = sneakersDto.ImageUrl;
 
             await _context.SaveChangesAsync();
             return sneakers;

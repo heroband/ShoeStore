@@ -3,6 +3,7 @@ using ShoeStore.Models.Interfaces;
 using ShoeStore.Models.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using ShoeStore.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShoeStore.Controllers
 {
@@ -33,6 +34,7 @@ namespace ShoeStore.Controllers
             return View(sneakers);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("AllProducts/Edit/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
@@ -49,6 +51,7 @@ namespace ShoeStore.Controllers
             return View(sneakersDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("AllProducts/Edit/{id}")]
         public async Task<IActionResult> Edit(string id, SneakersViewModel sneakersDto)
         {
@@ -69,6 +72,7 @@ namespace ShoeStore.Controllers
             return Redirect("/AllProducts");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("AllProducts/Delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
