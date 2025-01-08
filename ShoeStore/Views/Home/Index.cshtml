@@ -2,5 +2,13 @@
     ViewData["Title"] = "Main Page";
 }
 
-<h1>Welcome :3</h1>
 
+@if (User.Identity.IsAuthenticated)
+{
+    <h1>Welcome @User.Identity.Name</h1>
+}
+else
+{
+    <h1>Welcome</h1>
+    
+}
