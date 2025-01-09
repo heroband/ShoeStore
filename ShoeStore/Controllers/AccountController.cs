@@ -47,7 +47,7 @@ namespace ShoeStore.Controllers
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("Password", "Invalid password." + loginViewModel.Password);
+                ModelState.AddModelError("Password", "Invalid password.");
                 return View(loginViewModel);
             }
 
@@ -98,6 +98,72 @@ namespace ShoeStore.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize(Roles = "User,Admin")]
+        [HttpGet("Settings")]
+        public async Task<IActionResult> Settings()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var viewModel = new SettingsViewModel
+            {
+                DisplayName = user.UserName,
+                Email = user.Email
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "User,Admin")]
+        [HttpPost("Settings")]
+        public async Task<IActionResult> UpdateSettings(SettingsViewModel settingsViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Settings", settingsViewModel);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (settingsViewModel.Email != user.Email)
+            {
+                if (await _userRepository.IsEmailTakenAsync(settingsViewModel.Email))
+                {
+                    ModelState.AddModelError("Email", "This email is already taken.");
+                    return View("Settings", settingsViewModel);
+                }
+                user.Email = settingsViewModel.Email;
+            }
+
+            if (settingsViewModel.DisplayName != user.UserName)
+            {
+                user.UserName = settingsViewModel.DisplayName;
+            }
+
+            if (!string.IsNullOrEmpty(settingsViewModel.CurrentPassword) && !string.IsNullOrEmpty(settingsViewModel.NewPassword))
+            {
+                var isCurrentPasswordCorrect = await _userManager.CheckPasswordAsync(user, settingsViewModel.CurrentPassword);
+                if (!isCurrentPasswordCorrect) 
+                {
+                    ModelState.AddModelError("CurrentPassword", "The current password is incorrect.");
+                    return View("Settings", settingsViewModel);
+                }
+                var passwordChangeResult = await _userManager.ChangePasswordAsync(user, settingsViewModel.CurrentPassword, settingsViewModel.NewPassword);
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            TempData["SuccessMessage"] = "Settings updated successfully.";
+            return RedirectToAction("Settings");
         }
 
         [Authorize(Roles = "User,Admin")]

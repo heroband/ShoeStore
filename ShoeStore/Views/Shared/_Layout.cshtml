@@ -40,7 +40,26 @@
                 <div class="text-end">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="/Logout" class="btn btn-outline-light">Logout</a>
+                        <div class="dropdown">
+                            <a href="#" class="text-white me-3" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile Menu" style="text-decoration: none;">
+                                <i class="bi bi-person-circle fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/Settings">
+                                        <i class="bi bi-gear me-2"></i> Settings
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="/Logout">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     }
                     else
                     {
@@ -78,6 +97,8 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/PasswordVisibility.js"></script>
+
     
 </body>
 </html>

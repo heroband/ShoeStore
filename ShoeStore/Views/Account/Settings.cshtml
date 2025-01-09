@@ -1,0 +1,77 @@
+﻿@model SettingsViewModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <form asp-action="UpdateSettings" method="post" class="col-md-4 needs-validation" novalidate>
+        <h1 class="mb-4 text-center text-primary"><i class="bi bi-gear"></i> Account Settings</h1>
+
+        <!-- Display Name -->
+        <div class="form-floating mb-3">
+            <input asp-for="DisplayName" class="form-control" placeholder="Enter your display name" />
+            <label for="DisplayName">Display Name</label>
+            <span asp-validation-for="DisplayName" class="text-danger"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-floating mb-3">
+            <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" />
+            <label for="Email">Email</label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <!-- Current Password -->
+        <div class="mb-3 position-relative">
+            <div class="form-floating">
+                <input asp-for="CurrentPassword" id="current-password" type="password" class="form-control" placeholder="Enter your current password" />
+                <label for="CurrentPassword">Current Password</label>
+                <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm shadow-none position-absolute top-50 end-0 translate-middle-y me-3 toggle-visibility" data-target="current-password">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+
+        <!-- New Password -->
+        <div class="mb-3 position-relative">
+            <div class="form-floating">
+                <input asp-for="NewPassword" id="new-password" type="password" class="form-control" placeholder="Enter your new password" />
+                <label for="NewPassword">New Password</label>
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm position-absolute top-50 end-0 translate-middle-y me-3 toggle-visibility" data-target="new-password">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+
+        <!-- Confirm New Password -->
+        <div class="mb-3 position-relative">
+            <div class="form-floating">
+                <input asp-for="ConfirmNewPassword" id="confirm-password" type="password" class="form-control" placeholder="Confirm your new password" />
+                <label for="ConfirmNewPassword">Confirm New Password</label>
+                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm position-absolute top-50 end-0 translate-middle-y me-3 toggle-visibility" data-target="confirm-password">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-save me-2"></i> Save Changes
+            </button>
+            <a href="/" class="btn btn-secondary px-4">
+                <i class="bi bi-arrow-left-circle me-2"></i> Cancel
+            </a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt-4">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </form>
+</div>
