@@ -113,7 +113,8 @@ namespace ShoeStore.Controllers
             var viewModel = new SettingsViewModel
             {
                 DisplayName = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                Theme = user.Theme,
             };
 
             return View(viewModel);
@@ -149,17 +150,24 @@ namespace ShoeStore.Controllers
                 user.UserName = settingsViewModel.DisplayName;
             }
 
-            if (!string.IsNullOrEmpty(settingsViewModel.CurrentPassword) && !string.IsNullOrEmpty(settingsViewModel.NewPassword))
+            if (!string.IsNullOrEmpty(settingsViewModel.CurrentPassword))
             {
+                if (string.IsNullOrEmpty(settingsViewModel.NewPassword))
+                {
+                    ModelState.AddModelError("NewPassword", "Please enter the new password.");
+                    return View("Settings", settingsViewModel);
+                }
+
                 var isCurrentPasswordCorrect = await _userManager.CheckPasswordAsync(user, settingsViewModel.CurrentPassword);
                 if (!isCurrentPasswordCorrect) 
                 {
                     ModelState.AddModelError("CurrentPassword", "The current password is incorrect.");
                     return View("Settings", settingsViewModel);
                 }
-                var passwordChangeResult = await _userManager.ChangePasswordAsync(user, settingsViewModel.CurrentPassword, settingsViewModel.NewPassword);
+                await _userManager.ChangePasswordAsync(user, settingsViewModel.CurrentPassword, settingsViewModel.NewPassword);
             }
 
+            user.Theme = settingsViewModel.Theme;
             await _userManager.UpdateAsync(user);
 
             TempData["SuccessMessage"] = "Settings updated successfully.";

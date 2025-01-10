@@ -20,16 +20,18 @@ namespace ShoeStore.Models.ViewModels
 
         [DataType(DataType.Password)]
         [Display(Name = "Current Password")]
-        public string CurrentPassword { get; set; }
+        public string? CurrentPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$", ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
-        public string NewPassword { get; set; }
+        public string? NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm New Password")]
         [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
-        public string ConfirmNewPassword { get; set; }
+        public string? ConfirmNewPassword { get; set; }
+        [Display(Name = "Theme")]
+        public string Theme { get; set; }
     }
 }

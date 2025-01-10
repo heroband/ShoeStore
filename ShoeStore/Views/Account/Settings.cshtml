@@ -21,6 +21,16 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
+        <!-- Theme -->
+        <div class="form-floating mb-3">
+            <select asp-for="Theme" class="form-control">
+                <option value="light" selected="@(Model.Theme == "light")">Light</option>
+                <option value="dark" selected="@(Model.Theme == "dark")">Dark</option>
+            </select>
+            <label for="Theme">Theme</label>
+            <span asp-validation-for="Theme" class="text-danger"></span>
+        </div>
+
         <!-- Current Password -->
         <div class="mb-3 position-relative">
             <div class="form-floating">
@@ -66,6 +76,8 @@
                 <i class="bi bi-arrow-left-circle me-2"></i> Cancel
             </a>
         </div>
+
+
 
         @if (TempData["SuccessMessage"] != null)
         {
