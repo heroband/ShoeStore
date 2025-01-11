@@ -3,36 +3,38 @@
     ViewData["Title"] = "All Products";
 }
 
-<div class="album py-5 bg-light">
+<div class="album py-5 bg-theme">
+    <!-- bg-theme будет менять фон в зависимости от темы -->
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             @foreach (var sneakers in Model)
             {
                 <div class="col">
-                    <div class="card shadow-sm d-flex flex-column" style="height: 100%;">
+                    <div class="card product-card d-flex flex-column">
+                        <!-- product-card задаёт высоту и фон -->
                         <img src="@sneakers.ImageUrl" class="card-img-top img-thumbnail img-card" alt="Sneakers image" />
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold">@sneakers.Name</h5>
+                            <h5 class="card-title fw-bold product-title">@sneakers.Name</h5>
                             <p class="card-text">@sneakers.Id</p>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
                                 <div class="d-flex gap-2">
-                                    <a href="/AllProducts/Details/@sneakers.Id" class="btn btn-sm btn-outline-secondary d-flex align-items-center">
+                                    <a href="/AllProducts/Details/@sneakers.Id" class="btn btn-sm btn-outline-secondary d-flex align-items-center product-btn">
                                         <i class="bi bi-eye me-2"></i>View
                                     </a>
 
                                     @if (User.IsInRole("Admin"))
                                     {
-                                        <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center">
+                                        <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center product-btn">
                                             <i class="bi bi-pencil-square me-2"></i>Edit
                                         </a>
                                         <form method="post" action="/AllProducts/Delete/@sneakers.Id" style="display:inline;">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center product-btn">
                                                 <i class="bi bi-trash me-2"></i>Delete
                                             </button>
                                         </form>
                                     }
                                 </div>
-                                <small class="text-muted">@sneakers.Price UAH</small>
+                                <small class="text-muted product-price">@sneakers.Price UAH</small>
                             </div>
                         </div>
                     </div>
@@ -42,10 +44,9 @@
             @if (User.IsInRole("Admin"))
             {
                 <div class="col">
-                    <div class="card shadow-sm text-center" style="height: 100%;">
-                        <a href="/Add" class="d-flex justify-content-center align-items-center"
-                           style="height: 225px; text-decoration: none; color: inherit;">
-                            <i class="bi bi-plus-circle" style="font-size: 4rem;"></i>
+                    <div class="card shadow-sm text-center product-card">
+                        <a href="/Add" class="d-flex justify-content-center align-items-center add-product-link">
+                            <i class="bi bi-plus-circle add-icon"></i>
                         </a>
                         <div class="card-body">
                             <p class="card-text">Add a new product</p>

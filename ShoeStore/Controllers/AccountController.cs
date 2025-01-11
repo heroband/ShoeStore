@@ -114,7 +114,7 @@ namespace ShoeStore.Controllers
             {
                 DisplayName = user.UserName,
                 Email = user.Email,
-                Theme = user.Theme,
+                Theme = Request.Cookies["Theme"],
             };
 
             return View(viewModel);
@@ -135,6 +135,7 @@ namespace ShoeStore.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            /* check email change */
             if (settingsViewModel.Email != user.Email)
             {
                 if (await _userRepository.IsEmailTakenAsync(settingsViewModel.Email))
@@ -145,11 +146,13 @@ namespace ShoeStore.Controllers
                 user.Email = settingsViewModel.Email;
             }
 
+            /* check name change */
             if (settingsViewModel.DisplayName != user.UserName)
             {
                 user.UserName = settingsViewModel.DisplayName;
             }
 
+            /* check password change */
             if (!string.IsNullOrEmpty(settingsViewModel.CurrentPassword))
             {
                 if (string.IsNullOrEmpty(settingsViewModel.NewPassword))
@@ -167,7 +170,11 @@ namespace ShoeStore.Controllers
                 await _userManager.ChangePasswordAsync(user, settingsViewModel.CurrentPassword, settingsViewModel.NewPassword);
             }
 
-            user.Theme = settingsViewModel.Theme;
+            Response.Cookies.Append("Theme", settingsViewModel.Theme, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddYears(1)
+            });
+
             await _userManager.UpdateAsync(user);
 
             TempData["SuccessMessage"] = "Settings updated successfully.";
@@ -178,6 +185,7 @@ namespace ShoeStore.Controllers
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
+            Response.Cookies.Delete("Theme");
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

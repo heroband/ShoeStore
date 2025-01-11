@@ -1,0 +1,128 @@
+﻿:root {
+    /* Цвета фонов */
+    --background-color: #d7dfe5; /* Светлый фон */
+    --background-color-main: #ffffff; /* Белый фон */
+    --hover: #e9ecef; /* Светлый фон при наведении */
+    --border: #dee2e6; /* Светлая граница */
+    /* Основные цвета текста */
+    --text-primary: #212529; /* Тёмный текст */
+    --text-secondary: #ffffff; /* Белый текст */
+    --text-muted: #6c757d; /* Приглушённый текст */
+    /* Акцентные цвета */
+    --primary: #0d6efd; /* Синий цвет */
+    --warning: #ffc107; /* Жёлтый цвет */
+    --warning-hover: #e0a800; /* Жёлтый цвет при наведении */
+    --danger: #dc3545; /* Красный цвет */
+}
+
+.header {
+    background-color: var(--background-color);
+    color: var(--text-dark);
+}
+
+.route-link {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+    .route-link.active {
+        color: var(--primary);
+        font-weight: bold;
+    }
+
+.profile-icon {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.auth-btn {
+    background-color: var(--background-color);
+    border-color: var(--text-dark);
+    color: var(--text-dark);
+}
+
+    .auth-btn:hover {
+        background-color: var(--hover);
+    }
+
+.register-btn {
+    background-color: var(--warning);
+    border-color: var(--warning);
+    color: var(--text-dark);
+}
+
+    .register-btn:hover {
+        background-color: var(--warning-hover);
+    }
+
+.footer {
+    background-color: var(--background-color);
+    color: var(--text-muted);
+}
+
+.footer-text {
+    color: var(--text-muted);
+}
+
+.social-link {
+    color: var(--text-muted);
+}
+
+    .social-link:hover {
+        color: var(--primary);
+    }
+
+.bg-theme {
+    background-color: var(--background-color-main); /* Светлый фон */
+    color: var(--text-dark); /* Тёмный текст */
+}
+
+.product-card {
+    background-color: var(--background-color-main); /* Белый фон */
+    border: 1px solid var(--border);
+}
+
+.product-title {
+    color: var(--text-dark);
+}
+
+.product-btn {
+    color: var(--text-dark);
+    border-color: var(--border);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .product-btn:hover {
+        background-color: var(--hover);
+    }
+
+.product-price {
+    color: var(--text-muted);
+}
+
+.add-product-link {
+    height: 225px;
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+    .add-product-link:hover {
+        color: var(--primary); /* Синий при наведении */
+    }
+
+.add-icon {
+    font-size: 4rem;
+    color: var(--text-muted);
+}
+
+.btn-outline-warning:hover {
+    background-color: var(--warning); /* Жёлтый фон */
+    color: var(--text-dark); /* Тёмный текст */
+    border-color: var(--warning); /* Жёлтая граница */
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--danger); /* Красный фон */
+    color: var(--text-white); /* Белый текст */
+    border-color: var(--danger); /* Красная граница */
+}

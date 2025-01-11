@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Context.Request.Cookies.TryGetValue("Theme", out var themeCookie);
+    string theme = themeCookie ?? "light";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,41 +12,38 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-   
+
+    @* <link rel="stylesheet" href="~/css/site.css" /> *@
+    <link rel="stylesheet" href="~/css/theme-@(theme).css" />
 </head>
-<body>
-    <header class="p-3 bg-dark text-white">
+<body class="d-flex flex-column min-vh-100">
+    <header class="p-3 header">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li>
-                            <a href="/" class="nav-link px-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "text-secondary" : "text-white")">Home</a>
-                        </li>
-                        <li>
-                            <a href="/AllProducts" class="nav-link px-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "AllProducts" ? "text-secondary" : "text-white")">All Products</a>
-                        </li>
-                        <li>
-                            <a href="/FAQs" class="nav-link px-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "FAQs" ? "text-secondary" : "text-white")">FAQs</a>
-                        </li>
-                        <li>
-                            <a href="/About" class="nav-link px-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "About" ? "text-secondary" : "text-white")">About</a>
-                        </li>
-                    </ul>
-
+                    <li>
+                        <a href="/" class="nav-link px-2 route-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">Home</a>
+                    </li>
+                    <li>
+                        <a href="/AllProducts" class="nav-link px-2 route-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AllProducts" ? "active" : "")">All Products</a>
+                    </li>
+                    <li>
+                        <a href="/FAQs" class="nav-link px-2 route-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "FAQs" ? "active" : "")">FAQs</a>
+                    </li>
+                    <li>
+                        <a href="/About" class="nav-link px-2 route-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "About" ? "active" : "")">About</a>
+                    </li>
                 </ul>
 
-
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
                 </form>
 
                 <div class="text-end">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="dropdown">
-                            <a href="#" class="text-white me-3" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile Menu" style="text-decoration: none;">
+                            <a href="#" class="profile-icon" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile Menu">
                                 <i class="bi bi-person-circle fs-4"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
@@ -63,42 +65,42 @@
                     }
                     else
                     {
-                        <a href="/Login" class="btn btn-outline-light me-2">Login</a>
-                        <a href="/Register" class="btn btn-warning">Sign-up</a>
+                        <a href="/Login" class="btn auth-btn">Login</a>
+                        <a href="/Register" class="btn register-btn">Sign-up</a>
                     }
                 </div>
             </div>
         </div>
     </header>
 
-    
-    <main>
-        @RenderSection("styles", required: false)
+
+    <main class="flex-grow-1">
+        @* @RenderSection("styles", required: false) *@
         @RenderBody()
     </main>
 
-    <div class="container">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <div class="col-md-4 d-flex align-items-center">
-                <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-                    <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap" /></svg>
-                </a>
-                <span class="text-muted">&copy; 2025 Heroband, Inc</span>
-            </div>
+    <footer class="footer py-3 border-top">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div class="col-md-4 d-flex align-items-center">
+                    <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap" /></svg>
+                    </a>
+                    <span class="footer-text">&copy; 2025 Heroband, Inc</span>
+                </div>
 
-            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3"><a class="text-muted" href="#"><i class="bi bi-twitter-x"></i></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><i class="bi bi-instagram"></i></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><i class="bi bi-facebook"></i></a></li>
-            </ul>
-        </footer>
-    </div>
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                    <li class="ms-3"><a class="social-link" href="#"><i class="bi bi-twitter-x"></i></a></li>
+                    <li class="ms-3"><a class="social-link" href="#"><i class="bi bi-instagram"></i></a></li>
+                    <li class="ms-3"><a class="social-link" href="#"><i class="bi bi-facebook"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
     
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/PasswordVisibility.js"></script>
-
-    
 </body>
 </html>

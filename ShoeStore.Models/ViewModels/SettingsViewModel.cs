@@ -32,6 +32,7 @@ namespace ShoeStore.Models.ViewModels
         [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
         public string? ConfirmNewPassword { get; set; }
         [Display(Name = "Theme")]
+        [AllowedValues("light", "dark")]
         public string Theme { get; set; }
     }
 }
