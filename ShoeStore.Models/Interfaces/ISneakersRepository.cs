@@ -7,6 +7,7 @@ namespace ShoeStore.Models.Interfaces
     {
         Task<Sneakers> CreateAsync(Sneakers sneakersModel);
         Task<IEnumerable<SneakersShortInfoViewModel>> GetAllShortInfoAsync();
+        Task<IEnumerable<SneakersShortInfoViewModel>> GetFilteredShortInfoAsync(List<string> brands);
         Task<Sneakers?> GetByIdAsync(string id);
         Task<Sneakers?> UpdateAsync(string id, SneakersViewModel sneakersDto);
         Task<Sneakers?> DeleteAsync(string id);

@@ -1,59 +1,134 @@
-﻿@model IEnumerable<SneakersShortInfoViewModel>
+﻿@model FilterViewModel
 @{
     ViewData["Title"] = "All Products";
+    var brands = new List<string>
+    {
+        "Nike", "New Balance", "Adidas", "Converse", "Puma",
+        "Asics", "Reebok", "Salomon", "Dr.Martens", "VANS",
+        "Fila", "The North Face", "Crocs", "Merrell", "UGG",
+        "Columbia", "Timberland", "Hoka"
+    };
 }
 
 <div class="album py-5 bg-theme">
-    <!-- bg-theme будет менять фон в зависимости от темы -->
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            @foreach (var sneakers in Model)
-            {
-                <div class="col">
-                    <div class="card product-card d-flex flex-column">
-                        <!-- product-card задаёт высоту и фон -->
-                        <img src="@sneakers.ImageUrl" class="card-img-top img-thumbnail img-card" alt="Sneakers image" />
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold product-title">@sneakers.Name</h5>
-                            <p class="card-text">@sneakers.Id</p>
-                            <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <div class="d-flex gap-2">
-                                    <a href="/AllProducts/Details/@sneakers.Id" class="btn btn-sm btn-outline-secondary d-flex align-items-center product-btn">
-                                        <i class="bi bi-eye me-2"></i>View
-                                    </a>
+        <div class="row">
+            <!-- Панель фильтров -->    
+            <div class="col-md-2">
+                <div class="p-3 rounded shadow-sm d-flex flex-column">
+                    <h5 class="fw-bold mb-3">Brand</h5>
+                    <form asp-action="Index" asp-controller="AllProducts" method="get" class="d-flex flex-column flex-grow-1">
+                        <!-- Контейнер брендов -->
+                        <div id="brand-filters" class="flex-grow-1">
+                            @for (int i = 0; i < brands.Count; i++)
+                            {
+                                var brand = brands[i];
+                                var isChecked = Model.SelectedBrands != null && Model.SelectedBrands.Contains(brand);
 
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center product-btn">
-                                            <i class="bi bi-pencil-square me-2"></i>Edit
-                                        </a>
-                                        <form method="post" action="/AllProducts/Delete/@sneakers.Id" style="display:inline;">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center product-btn">
-                                                <i class="bi bi-trash me-2"></i>Delete
-                                            </button>
-                                        </form>
-                                    }
+                                <div class="mb-2 @(i >= 3 ? "collapse extra-filters" : "")">
+                                    <label class="form-check-label">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               name="SelectedBrands"
+                                               value="@brand"
+                                        @(isChecked ? "checked" : "")>
+                                        @brand
+                                    </label>
                                 </div>
-                                <small class="text-muted product-price">@sneakers.Price UAH</small>
+                            }
+                        </div>
+
+                        <!-- Label управления видимостью -->
+                        <label class="btn-link p-0 mt-2 text-decoration-underline text-black"
+                               data-bs-toggle="collapse"
+                               data-bs-target=".extra-filters"
+                               aria-expanded="false"
+                               aria-controls="extra-filters"
+                               style="cursor: pointer;"
+                               onclick="toggleFilterText(this)">
+                            Show more
+                        </label>
+
+                        <!-- Кнопка "Очистить фильтры" -->
+                        <div class="mt-3">
+                            <a href="/AllProducts/Index" class="btn btn-secondary w-100 rounded-pill shadow-sm transition-all transform hover:bg-secondary hover:scale-105">
+                                <span class="fw-bold">Clear Filters</span>
+                            </a>
+                        </div>
+
+                        <!-- Кнопка "Применить фильтры" -->
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm transition-all transform hover:bg-primary hover:scale-105">
+                                <span class="fw-bold">Apply Filters</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Карточки -->
+            <div class="col-md-10">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    @if (Model.Sneakers != null && Model.Sneakers.Any())
+                    {
+                        @foreach (var sneakers in Model.Sneakers)
+                        {
+                            <div class="col">
+                                <div class="card product-card d-flex flex-column">
+                                    <!-- product-card задаёт высоту и фон -->
+                                    <a href="/AllProducts/Details/@sneakers.Id">
+                                        <img src="@sneakers.ImageUrl" class="card-img-top img-thumbnail img-card" alt="Sneakers image" />
+                                    </a>
+                                    <div class="card-body d-flex flex-column">
+                                        <a href="/AllProducts/Details/@sneakers.Id" class="text-decoration-none text-dark">
+                                            <h5 class="card-title fw-bold product-title">@sneakers.Name</h5>
+                                        </a>
+                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                            <div class="d-flex gap-2">
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <a href="/AllProducts/Edit/@sneakers.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center product-btn">
+                                                        <i class="bi bi-pencil-square me-2"></i>Edit
+                                                    </a>
+                                                    <form method="post" action="/AllProducts/Delete/@sneakers.Id" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center product-btn">
+                                                            <i class="bi bi-trash me-2"></i>Delete
+                                                        </button>
+                                                    </form>
+                                                }
+                                            </div>
+                                            <small class="text-muted product-price">@sneakers.Price UAH</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">
+                                <strong>No sneakers found matching your filter criteria.</strong>
                             </div>
                         </div>
-                    </div>
-                </div>
-            }
+                    }
 
-            @if (User.IsInRole("Admin"))
-            {
-                <div class="col">
-                    <div class="card shadow-sm text-center product-card">
-                        <a href="/Add" class="d-flex justify-content-center align-items-center add-product-link">
-                            <i class="bi bi-plus-circle add-icon"></i>
-                        </a>
-                        <div class="card-body">
-                            <p class="card-text">Add a new product</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="col">
+                            <div class="card product-card d-flex flex-column">
+                                <a href="/Add" class="d-flex justify-content-center align-items-center add-product-link">
+                                    <i class="bi bi-plus-circle add-icon"></i>
+                                </a>
+                                <div class="card-body">
+                                    <p class="card-text">Add a new product</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>

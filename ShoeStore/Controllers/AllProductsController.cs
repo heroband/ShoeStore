@@ -14,10 +14,17 @@ namespace ShoeStore.Controllers
         {
             _sneakersRepository = sneakersRepository;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FilterViewModel filter)
         {
-            var sneakers = await _sneakersRepository.GetAllShortInfoAsync();
-            return View(sneakers);
+            if (filter.SelectedBrands == null || filter.SelectedBrands.Count == 0)
+            {
+                filter.Sneakers = await _sneakersRepository.GetAllShortInfoAsync();
+            }
+            else
+            {
+                filter.Sneakers = await _sneakersRepository.GetFilteredShortInfoAsync(filter.SelectedBrands);
+            }
+            return View(filter);
         }
 
         [HttpGet("AllProducts/Details/{id}")]

@@ -49,6 +49,21 @@ namespace ShoeStore.DataAccess.Repository
             return await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        public async Task<IEnumerable<SneakersShortInfoViewModel>> GetFilteredShortInfoAsync(List<string> brands)
+        {
+            var sneakers = await _context.Sneakers.ToListAsync();
+
+            return sneakers
+                .Where(s => brands.Any(brand => s.Name.Contains(brand, StringComparison.OrdinalIgnoreCase)))
+                .Select(s => new SneakersShortInfoViewModel
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Price = s.Price,
+                    ImageUrl = s.ImageUrl,
+                });
+        }
+
         public async Task<Sneakers?> UpdateAsync(string id, SneakersViewModel sneakersDto)
         {
             var sneakers = await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
