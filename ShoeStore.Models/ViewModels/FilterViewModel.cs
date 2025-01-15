@@ -10,5 +10,6 @@ namespace ShoeStore.Models.ViewModels
     {
         public IEnumerable<SneakersShortInfoViewModel> Sneakers { get; set; }
         public List<string> SelectedBrands { get; set; } = new();
+        public List<string> SelectedSizes { get; set; } = new();
     }
 }

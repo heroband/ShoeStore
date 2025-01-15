@@ -16,13 +16,14 @@ namespace ShoeStore.Controllers
         }
         public async Task<IActionResult> Index(FilterViewModel filter)
         {
-            if (filter.SelectedBrands == null || filter.SelectedBrands.Count == 0)
+            if ((filter.SelectedBrands == null || filter.SelectedBrands.Count == 0) &&
+                (filter.SelectedSizes == null || filter.SelectedSizes.Count == 0))
             {
                 filter.Sneakers = await _sneakersRepository.GetAllShortInfoAsync();
             }
             else
             {
-                filter.Sneakers = await _sneakersRepository.GetFilteredShortInfoAsync(filter.SelectedBrands);
+                filter.Sneakers = await _sneakersRepository.GetFilteredShortInfoAsync(filter.SelectedBrands, filter.SelectedSizes);
             }
             return View(filter);
         }

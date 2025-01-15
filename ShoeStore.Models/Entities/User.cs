@@ -9,6 +9,5 @@ namespace ShoeStore.Models.Entities
 {
     public class User : IdentityUser
     {
-        public string Theme { get; set; } = "light";
     }
 }

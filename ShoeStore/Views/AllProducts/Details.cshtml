@@ -1,6 +1,8 @@
 ﻿@model Sneakers
 @{
     ViewData["Title"] = "Details - " + Model.Name;
+
+    var sizesList = Model.Sizes?.Split(' ', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
 }
 
 <div class="container mt-5">
@@ -16,8 +18,13 @@
 
             <ul class="list-group list-group-flush my-4">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="fw-semibold">Size</span>
-                    <span class="badge bg-info text-dark">@Model.Size</span>
+                    <span class="fw-semibold">Sizes</span>
+                    <div class="d-flex justify-content-end flex-wrap">
+                        @foreach (var size in sizesList)
+                        {
+                            <span class="badge bg-info text-dark me-1 mb-1">@size</span>
+                        }
+                    </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="fw-semibold">Price</span>

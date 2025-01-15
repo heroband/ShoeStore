@@ -49,19 +49,35 @@ namespace ShoeStore.DataAccess.Repository
             return await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<IEnumerable<SneakersShortInfoViewModel>> GetFilteredShortInfoAsync(List<string> brands)
+        public async Task<IEnumerable<SneakersShortInfoViewModel>> GetFilteredShortInfoAsync(List<string> brands, List<string> sizes)
         {
             var sneakers = await _context.Sneakers.ToListAsync();
 
-            return sneakers
-                .Where(s => brands.Any(brand => s.Name.Contains(brand, StringComparison.OrdinalIgnoreCase)))
-                .Select(s => new SneakersShortInfoViewModel
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Price = s.Price,
-                    ImageUrl = s.ImageUrl,
-                });
+            // Фильтрация по брендам (если бренды указаны)
+            var filteredSneakers = sneakers.AsQueryable();
+
+            if (brands != null && brands.Any())
+            {
+                filteredSneakers = filteredSneakers.Where(s =>
+                    brands.Any(brand => s.Name.Contains(brand, StringComparison.OrdinalIgnoreCase))
+                );
+            }
+
+            // Фильтрация по размерам (если размеры указаны)
+            if (sizes != null && sizes.Any())
+            {
+                filteredSneakers = filteredSneakers.Where(s =>
+                    sizes.Any(size => s.Sizes.Contains(size)) // Предполагается, что s.Sizes — это строка или коллекция
+                );
+            }
+
+            return filteredSneakers.Select(s => new SneakersShortInfoViewModel
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Price = s.Price,
+                ImageUrl = s.ImageUrl,
+            });
         }
 
         public async Task<Sneakers?> UpdateAsync(string id, SneakersViewModel sneakersDto)
@@ -75,7 +91,7 @@ namespace ShoeStore.DataAccess.Repository
 
             sneakers.Name = sneakersDto.Name;
             sneakers.Description = sneakersDto.Description;
-            sneakers.Size = sneakersDto.Size;
+            sneakers.Sizes = sneakersDto.Sizes;
             sneakers.Price = sneakersDto.Price;
             sneakers.ImageUrl = sneakersDto.ImageUrl;
 

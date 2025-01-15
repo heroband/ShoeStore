@@ -8,16 +8,18 @@
         "Fila", "The North Face", "Crocs", "Merrell", "UGG",
         "Columbia", "Timberland", "Hoka"
     };
+    var sizes = new List<string> { "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46" };
 }
 
 <div class="album py-5 bg-theme">
     <div class="container">
         <div class="row">
-            <!-- Панель фильтров -->    
+            <!-- Панель фильтров -->
             <div class="col-md-2">
                 <div class="p-3 rounded shadow-sm d-flex flex-column">
                     <h5 class="fw-bold mb-3">Brand</h5>
                     <form asp-action="Index" asp-controller="AllProducts" method="get" class="d-flex flex-column flex-grow-1">
+
                         <!-- Контейнер брендов -->
                         <div id="brand-filters" class="flex-grow-1">
                             @for (int i = 0; i < brands.Count; i++)
@@ -48,6 +50,19 @@
                                onclick="toggleFilterText(this)">
                             Show more
                         </label>
+
+                        <h5 class="fw-bold mb-3 mt-4">Size</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var size in sizes)
+                            {
+                                var isChecked = Model.SelectedSizes != null && Model.SelectedSizes.Contains(size);
+                                <button type="submit"
+                                        class="btn btn-outline-dark @((isChecked ? "active" : "")) size-btn"
+                                        name="SelectedSizes" value="@size">
+                                    @size
+                                </button>
+                            }
+                        </div>
 
                         <!-- Кнопка "Очистить фильтры" -->
                         <div class="mt-3">

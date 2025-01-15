@@ -12,7 +12,7 @@ namespace ShoeStore.Models.Mappers
             {
                 Name = sneakersDto.Name,
                 Description = sneakersDto.Description,
-                Size = sneakersDto.Size,
+                Sizes = sneakersDto.Sizes,
                 Price = sneakersDto.Price,
                 ImageUrl = sneakersDto.ImageUrl,
             };
@@ -24,7 +24,7 @@ namespace ShoeStore.Models.Mappers
             {
                 Name = sneakers.Name,
                 Description = sneakers.Description,
-                Size = sneakers.Size,
+                Sizes = sneakers.Sizes,
                 Price = sneakers.Price,
                 ImageUrl = sneakers.ImageUrl,
             };
