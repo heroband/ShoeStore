@@ -5,6 +5,7 @@ using ShoeStore.DataAccess.Repository;
 using ShoeStore.Models.Entities;
 using ShoeStore.Models.Interfaces;
 using ShoeStore.Models.ViewModels;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace ShoeStore.Controllers
@@ -54,6 +55,60 @@ namespace ShoeStore.Controllers
             await _signInManager.SignInAsync(user, false);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                TempData["ErrorMessage"] = $"Error from external provider: {remoteError}";
+                return RedirectToAction(nameof(Login));
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+
+            if (signInResult.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (email != null)
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        UserName = email,
+                        Email = email
+                    };
+                    await _userManager.CreateAsync(user);
+                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddLoginAsync(user, info);
+                }
+
+                await _signInManager.SignInAsync(user, false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            TempData["ErrorMessage"] = "Email claim not received.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
         }
 
 
