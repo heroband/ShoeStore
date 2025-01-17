@@ -12,5 +12,7 @@ namespace ShoeStore.DataAccess
         }
 
         public DbSet<Sneakers> Sneakers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
     }
 }

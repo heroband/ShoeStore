@@ -49,13 +49,21 @@ namespace ShoeStore.DataAccess.Repository
             return await _context.Sneakers.FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        public async Task<Sneakers?> GetByIdWithDetailsAsync(string id)
+        {
+            return await _context.Sneakers
+                .Include(s => s.Comments)
+                .ThenInclude(c => c.User)
+                .Include(s => s.Ratings)
+                .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
         public async Task<IEnumerable<SneakersShortInfoViewModel>> GetFilteredShortInfoAsync(List<string> brands, List<string> sizes)
         {
             var sneakers = await _context.Sneakers.ToListAsync();
-
-            // Фильтрация по брендам (если бренды указаны)
             var filteredSneakers = sneakers.AsQueryable();
 
+            // Фильтрация по брендам (если бренды указаны)
             if (brands != null && brands.Any())
             {
                 filteredSneakers = filteredSneakers.Where(s =>
@@ -67,7 +75,7 @@ namespace ShoeStore.DataAccess.Repository
             if (sizes != null && sizes.Any())
             {
                 filteredSneakers = filteredSneakers.Where(s =>
-                    sizes.Any(size => s.Sizes.Contains(size)) // Предполагается, что s.Sizes — это строка или коллекция
+                    sizes.Any(size => s.Sizes.Contains(size))
                 );
             }
 
@@ -98,5 +106,42 @@ namespace ShoeStore.DataAccess.Repository
             await _context.SaveChangesAsync();
             return sneakers;
         }
+
+        public async Task AddCommentAsync(string sneakersId, string userId, string content)
+        {
+            var comment = new Comment
+            {
+                SneakersId = sneakersId,
+                UserId = userId,
+                Content = content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddRatingAsync(string sneakersId, string userId, int score)
+        {
+            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.SneakersId == sneakersId && r.UserId == userId);
+
+            if (existingRating == null)
+            {
+                var rating = new Rating
+                {
+                    SneakersId = sneakersId,
+                    UserId = userId,
+                    Score = score
+                };
+                await _context.Ratings.AddAsync(rating);
+            }
+            else
+            {
+                existingRating.Score = score;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

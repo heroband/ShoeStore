@@ -4,6 +4,8 @@ using ShoeStore.Models.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using ShoeStore.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using ShoeStore.Models.Entities;
+using System.Security.Claims;
 
 namespace ShoeStore.Controllers
 {
@@ -31,7 +33,7 @@ namespace ShoeStore.Controllers
         [HttpGet("AllProducts/Details/{id}")]
         public async Task<IActionResult> Details(string id)
         {
-            var sneakers = await _sneakersRepository.GetByIdAsync(id);
+            var sneakers = await _sneakersRepository.GetByIdWithDetailsAsync(id);
             if (sneakers == null)
             {
                 return View("Error", new ErrorViewModel
@@ -39,8 +41,49 @@ namespace ShoeStore.Controllers
                     RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
                 });
             }
-            return View(sneakers);
+
+            var viewModel = new SneakersDetailsViewModel
+            {
+                Sneakers = sneakers,
+                Comments = sneakers.Comments.OrderByDescending(c => c.CreatedAt).ToList(),
+                AverageRating = sneakers.Ratings.Any() ? sneakers.Ratings.Average(r => r.Score) : 0
+            };
+
+            return View(viewModel);
         }
+
+        [Authorize]
+        [HttpPost("AllProducts/Details/{id}/AddComment")]
+        public async Task<IActionResult> AddComment(string id, string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                TempData["Error"] = "Comment cannot be empty.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _sneakersRepository.AddCommentAsync(id, userId, content);
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [Authorize]
+        [HttpPost("AllProducts/Details/{id}/AddRating")]
+        public async Task<IActionResult> AddRating(string id, int score)
+        {
+            if (score < 1 || score > 5)
+            {
+                TempData["Error"] = "Rating must be between 1 and 5.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _sneakersRepository.AddRatingAsync(id, userId, score);
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet("AllProducts/Edit/{id}")]
